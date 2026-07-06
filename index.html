@@ -95,24 +95,26 @@
           <p id="missionStory" class="story"></p>
         </div>
 
-        <div id="problemArea" class="problem-area"></div>
+        <div class="mission-controls">
+          <form id="answerForm" class="answer-form">
+            <label for="answerInput">추리 입력</label>
+            <div class="answer-row">
+              <input id="answerInput" autocomplete="off" inputmode="numeric" />
+              <button id="submitButton" type="submit">단서 제출</button>
+            </div>
+          </form>
 
-        <form id="answerForm" class="answer-form">
-          <label for="answerInput">추리 입력</label>
-          <div class="answer-row">
-            <input id="answerInput" autocomplete="off" inputmode="numeric" />
-            <button id="submitButton" type="submit">단서 제출</button>
+          <div class="actions">
+            <button id="hintButton" type="button" class="secondary">NPC 힌트</button>
+            <button id="nextButton" type="button" class="secondary" disabled>다음 퀘스트</button>
+            <button id="restartButton" type="button" class="secondary hidden">새 모험</button>
           </div>
-        </form>
 
-        <div class="actions">
-          <button id="hintButton" type="button" class="secondary">NPC 힌트</button>
-          <button id="nextButton" type="button" class="secondary" disabled>다음 퀘스트</button>
-          <button id="restartButton" type="button" class="secondary hidden">새 모험</button>
+          <p id="feedback" class="feedback"></p>
+          <p id="hintText" class="hint"></p>
         </div>
 
-        <p id="feedback" class="feedback"></p>
-        <p id="hintText" class="hint"></p>
+        <div id="problemArea" class="problem-area"></div>
       </section>
     </main>
 
