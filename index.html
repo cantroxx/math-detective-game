@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>규칙 탐정단</title>
+    <title>규칙 탐정단: 사라진 암호</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -12,60 +12,93 @@
         <div class="hero-copy">
           <p class="eyebrow">초등 4학년 1학기 6단원</p>
           <h1>규칙 탐정단</h1>
-          <p class="hero-line">사라진 수와 도형 단서를 찾아 사건 지도를 완성하세요.</p>
+          <p class="hero-line">마을 곳곳의 수학 단서를 모아 마지막 금고 암호를 여세요.</p>
         </div>
 
-        <div class="score-board" aria-label="현재 점수">
-          <span id="stageLabel">1 / 10</span>
-          <strong id="starsLabel">별 0개</strong>
+        <div class="hud" aria-label="게임 진행 정보">
+          <div>
+            <span>해결</span>
+            <strong id="stageLabel">0 / 24</strong>
+          </div>
+          <div>
+            <span>별</span>
+            <strong id="starsLabel">0개</strong>
+          </div>
+          <div>
+            <span>암호</span>
+            <strong id="codeLabel">------</strong>
+          </div>
         </div>
       </section>
 
-      <section class="game-layout">
-        <aside class="detective-panel" aria-label="탐정 조수">
-          <div class="mascot" aria-hidden="true">🕵️</div>
-          <div class="speech-bubble">
-            <strong>단서 메모</strong>
-            <p id="detectiveLine">첫 사건이에요. 수가 어떻게 변하는지 살펴보세요.</p>
+      <section class="game-shell">
+        <section class="map-panel" aria-label="사건 지도">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">이동 지도</p>
+              <h2>수상한 마을</h2>
+            </div>
+            <span id="mapStatus" class="map-status">첫 장소 조사 중</span>
+          </div>
+
+          <div id="worldMap" class="world-map"></div>
+
+          <div class="route-note">
+            <span>조사 순서</span>
+            <strong id="routeLabel">시계탑 → 시장 → 도서관 → 정거장 → 연구소 → 금고실</strong>
+          </div>
+        </section>
+
+        <aside class="side-panel" aria-label="탐정 수첩">
+          <div class="detective-card">
+            <div class="mascot" aria-hidden="true">🕵️</div>
+            <div>
+              <strong>단서 메모</strong>
+              <p id="detectiveLine">지도에서 열린 장소를 선택하고 첫 단서를 조사하세요.</p>
+            </div>
+          </div>
+
+          <div class="inventory">
+            <div class="panel-heading compact">
+              <h2>암호 조각</h2>
+              <span id="clueCount">0 / 6</span>
+            </div>
+            <div id="clueBoard" class="clue-board"></div>
           </div>
         </aside>
-
-        <section class="mission-panel" aria-live="polite">
-          <div class="mission-header">
-            <span id="typeBadge" class="badge">숫자 규칙</span>
-            <span id="attemptBadge" class="attempt">기회 3번</span>
-          </div>
-
-          <h2 id="missionTitle">문제를 불러오는 중...</h2>
-          <p id="missionStory" class="story"></p>
-
-          <div id="problemArea" class="problem-area"></div>
-
-          <form id="answerForm" class="answer-form">
-            <label for="answerInput">정답</label>
-            <div class="answer-row">
-              <input id="answerInput" autocomplete="off" inputmode="numeric" />
-              <button type="submit">확인</button>
-            </div>
-          </form>
-
-          <div class="actions">
-            <button id="hintButton" type="button" class="secondary">힌트</button>
-            <button id="nextButton" type="button" class="secondary" disabled>다음</button>
-            <button id="restartButton" type="button" class="secondary hidden">처음부터</button>
-          </div>
-
-          <p id="feedback" class="feedback"></p>
-          <p id="hintText" class="hint"></p>
-        </section>
       </section>
 
-      <section class="progress-panel">
-        <div class="section-title">
-          <h2>사건 지도</h2>
-          <span>해결한 단서에 도장이 찍혀요</span>
+      <section class="mission-panel" aria-live="polite">
+        <div class="mission-topline">
+          <span id="locationBadge" class="location-badge">시계탑</span>
+          <span id="typeBadge" class="type-badge">숫자 규칙</span>
+          <span id="attemptBadge" class="attempt">기회 3번</span>
         </div>
-        <div id="notebook" class="notebook"></div>
+
+        <div class="mission-copy">
+          <p id="missionMeta" class="mission-meta">1번째 단서</p>
+          <h2 id="missionTitle">문제를 불러오는 중...</h2>
+          <p id="missionStory" class="story"></p>
+        </div>
+
+        <div id="problemArea" class="problem-area"></div>
+
+        <form id="answerForm" class="answer-form">
+          <label for="answerInput">정답</label>
+          <div class="answer-row">
+            <input id="answerInput" autocomplete="off" inputmode="numeric" />
+            <button id="submitButton" type="submit">조사</button>
+          </div>
+        </form>
+
+        <div class="actions">
+          <button id="hintButton" type="button" class="secondary">힌트</button>
+          <button id="nextButton" type="button" class="secondary" disabled>다음 단서</button>
+          <button id="restartButton" type="button" class="secondary hidden">처음부터</button>
+        </div>
+
+        <p id="feedback" class="feedback"></p>
+        <p id="hintText" class="hint"></p>
       </section>
     </main>
 
