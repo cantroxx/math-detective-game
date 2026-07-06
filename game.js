@@ -421,6 +421,10 @@ function getSolvedCount() {
   return state.solved.size;
 }
 
+function hpText() {
+  return `HP ${"♥".repeat(state.attemptsLeft)}${"♡".repeat(3 - state.attemptsLeft)}`;
+}
+
 function renderGame() {
   const solvedCount = getSolvedCount();
   stageLabel.textContent = `${solvedCount} / ${missions.length}`;
@@ -495,14 +499,14 @@ function renderMap() {
       <span class="node-index">${String(locationNumber).padStart(2, "0")}</span>
       <span class="icon" aria-hidden="true">${location.icon}</span>
       <strong>${location.name}</strong>
-      <span class="node-meta">${unlocked ? `${solvedInLocation}/${missionsInLocation.length} 단서` : "잠김"}</span>
+      <span class="node-meta">${unlocked ? `${solvedInLocation}/${missionsInLocation.length} 퀘스트` : "잠김"}</span>
     `;
     node.addEventListener("click", () => selectLocation(location.id));
     worldMap.appendChild(node);
   });
 
   const currentLocation = getLocation(state.selectedLocationId);
-  mapStatus.textContent = state.finalMode ? "마지막 암호 입력" : `${currentLocation.name} 조사 중`;
+  mapStatus.textContent = state.finalMode ? "보스 금고전" : `${currentLocation.name} 입장 중`;
 }
 
 function renderClues() {
@@ -514,7 +518,7 @@ function renderClues() {
     chip.innerHTML = `
       <span class="digit">${collected ? location.clue : "?"}</span>
       <span>${index + 1}. ${location.name}</span>
-      <span>${collected ? "획득" : "미해결"}</span>
+      <span>${collected ? "획득" : "미발견"}</span>
     `;
     clueBoard.appendChild(chip);
   });
@@ -541,14 +545,14 @@ function renderMission(mission) {
   answerInput.disabled = false;
   hintButton.disabled = false;
   nextButton.disabled = true;
-  submitButton.textContent = "조사";
-  attemptBadge.textContent = `기회 ${state.attemptsLeft}번`;
+  submitButton.textContent = "단서 제출";
+  attemptBadge.textContent = hpText();
   locationBadge.textContent = `${location.icon} ${location.name}`;
   typeBadge.textContent = mission.type;
-  missionMeta.textContent = `${missionIndex}번째 단서`;
+  missionMeta.textContent = `${missionIndex}번째 퀘스트`;
   missionTitle.textContent = mission.title;
   missionStory.textContent = mission.story;
-  detectiveLine.textContent = location.line;
+  detectiveLine.textContent = `${location.name}에 도착했습니다. NPC가 남긴 규칙 흔적을 추리해 보세요.`;
   feedback.textContent = "";
   feedback.className = "feedback";
   hintText.textContent = "";
@@ -571,13 +575,13 @@ function renderLocationComplete() {
   nextButton.disabled = false;
   restartButton.classList.add("hidden");
   locationBadge.textContent = `${location.icon} ${location.name}`;
-  typeBadge.textContent = "장소 완료";
-  attemptBadge.textContent = "단서 획득";
-  missionMeta.textContent = "조사 완료";
-  missionTitle.textContent = `${location.name} 단서 확보`;
-  missionStory.textContent = "지도에서 새로 열린 장소를 선택하거나 다음 장소로 이동하세요.";
-  detectiveLine.textContent = `${location.name}의 암호 조각은 ${location.clue}입니다.`;
-  feedback.textContent = "새 장소가 열렸습니다.";
+  typeBadge.textContent = "스테이지 클리어";
+  attemptBadge.textContent = "조각 획득";
+  missionMeta.textContent = "지역 클리어";
+  missionTitle.textContent = `${location.name} 스테이지 클리어`;
+  missionStory.textContent = "다음 지역의 문이 열렸습니다. 월드맵에서 새 장소로 이동하세요.";
+  detectiveLine.textContent = `${location.name}에서 암호 조각 ${location.clue}을 획득했습니다.`;
+  feedback.textContent = "새 지역이 해금되었습니다.";
   feedback.className = "feedback good";
   hintText.textContent = "";
   problemArea.className = "problem-area";
@@ -585,7 +589,7 @@ function renderLocationComplete() {
     <div class="final-panel">
       <div class="vault">${location.icon}</div>
       <strong>암호 조각 ${location.clue}</strong>
-      <p>${location.name} 조사를 완료했습니다.</p>
+      <p>${location.name} 스테이지를 클리어했습니다.</p>
     </div>
   `;
 }
@@ -598,14 +602,14 @@ function renderFinalMission() {
   answerInput.value = "";
   answerInput.disabled = false;
   hintButton.disabled = false;
-  submitButton.textContent = "금고 열기";
-  locationBadge.textContent = "🔐 마지막 금고";
-  typeBadge.textContent = "최종 암호";
-  attemptBadge.textContent = "기회 3번";
-  missionMeta.textContent = "최종 사건";
+  submitButton.textContent = "보스 공략";
+  locationBadge.textContent = "🔐 보스 금고";
+  typeBadge.textContent = "최종 보스";
+  attemptBadge.textContent = hpText();
+  missionMeta.textContent = "Final Stage";
   missionTitle.textContent = "모은 암호 조각을 순서대로 입력하세요";
   missionStory.textContent = "이동 지도에 적힌 조사 순서대로 암호 조각을 이어 붙이면 금고가 열립니다.";
-  detectiveLine.textContent = "암호 조각은 장소를 완료한 순서가 아니라, 지도에 적힌 조사 순서대로 읽어야 해요.";
+  detectiveLine.textContent = "보스 금고는 월드맵 루트 순서로만 열립니다. 조각을 차례대로 연결하세요.";
   feedback.textContent = "";
   feedback.className = "feedback";
   hintText.textContent = "";
@@ -614,7 +618,7 @@ function renderFinalMission() {
     <div class="final-panel">
       <div class="vault">🔐</div>
       <strong>${codeLabel.textContent}</strong>
-      <p>시계탑부터 금고실까지, 암호 조각을 차례대로 입력하세요.</p>
+      <p>월드맵 루트를 따라 암호 조각을 차례대로 입력하세요.</p>
     </div>
   `;
   answerInput.focus();
@@ -625,14 +629,14 @@ function renderSolvedFinal() {
   hintButton.classList.add("hidden");
   nextButton.classList.add("hidden");
   restartButton.classList.remove("hidden");
-  locationBadge.textContent = "사건 해결";
-  typeBadge.textContent = "완료";
+  locationBadge.textContent = "엔딩 도달";
+  typeBadge.textContent = "클리어";
   attemptBadge.textContent = "성공";
-  missionMeta.textContent = "명탐정 인증";
-  missionTitle.textContent = "사라진 암호 사건 해결!";
-  missionStory.textContent = "모든 장소의 단서를 모아 마지막 금고를 열었습니다.";
-  detectiveLine.textContent = "훌륭해요. 이제 이 마을의 규칙 사건은 완전히 해결됐습니다.";
-  feedback.textContent = "규칙 탐정단 최고 기록!";
+  missionMeta.textContent = "Clear Reward";
+  missionTitle.textContent = "보스 금고 클리어!";
+  missionStory.textContent = "모든 지역을 탐험하고 마지막 금고를 열었습니다.";
+  detectiveLine.textContent = "완벽한 플레이입니다. 규칙 탐정단의 새 모험이 열릴지도 몰라요.";
+  feedback.textContent = "퀘스트 완료 보너스 획득!";
   feedback.className = "feedback good";
   hintText.textContent = "";
   problemArea.className = "problem-area";
@@ -640,7 +644,7 @@ function renderSolvedFinal() {
     <div class="final-panel">
       <div class="vault">🏆</div>
       <strong>최종 암호 ${finalAnswer}</strong>
-      <p>해결한 단서 ${getSolvedCount()}개, 획득한 별 ${state.stars}개</p>
+      <p>완료한 퀘스트 ${getSolvedCount()}개, 획득한 배지 ${state.stars}개</p>
     </div>
   `;
 }
@@ -718,7 +722,7 @@ function checkAnswer(event) {
   const userAnswer = normalize(answerInput.value);
 
   if (!userAnswer) {
-    showFeedback("정답을 입력해 주세요.", "bad");
+    showFeedback("추리 값을 입력해 주세요.", "bad");
     return;
   }
 
@@ -735,8 +739,8 @@ function checkAnswer(event) {
     state.stars += earned;
     state.solved.add(mission.id);
     collectLocationClueIfComplete(mission.locationId);
-    showFeedback(`정답입니다! ${mission.rule}을 찾아냈어요. 별 ${earned}개 획득!`, "good");
-    detectiveLine.textContent = "좋아요. 이 단서가 지도에 기록됐습니다.";
+    showFeedback(`퀘스트 성공! ${mission.rule} 스킬을 발동했어요. 배지 ${earned}개 획득!`, "good");
+    detectiveLine.textContent = "좋아요. 규칙 몬스터가 약해지고 지도에 흔적이 기록됐습니다.";
     animateProblem("good-pop");
     launchSparkles();
     answerInput.disabled = true;
@@ -752,14 +756,14 @@ function checkAnswer(event) {
   }
 
   state.attemptsLeft -= 1;
-  attemptBadge.textContent = `기회 ${state.attemptsLeft}번`;
+  attemptBadge.textContent = hpText();
   animateProblem("bad-shake");
 
   if (state.attemptsLeft <= 0) {
     state.solved.add(mission.id);
     collectLocationClueIfComplete(mission.locationId);
-    showFeedback(`아쉬워요. 정답은 ${mission.answer}입니다. 규칙은 '${mission.rule}'이에요.`, "bad");
-    detectiveLine.textContent = "정답을 확인한 뒤 규칙을 말로 설명해 보세요. 다음 단서로 넘어갈 수 있어요.";
+    showFeedback(`HP가 모두 소진됐습니다. 해답은 ${mission.answer}, 사용 스킬은 '${mission.rule}'입니다.`, "bad");
+    detectiveLine.textContent = "스킬 설명을 확인했습니다. 다음 퀘스트로 이동할 수 있어요.";
     answerInput.disabled = true;
     hintButton.disabled = true;
     nextButton.disabled = false;
@@ -771,8 +775,8 @@ function checkAnswer(event) {
     return;
   }
 
-  detectiveLine.textContent = "아직 단서가 남아 있어요. 변화량이나 곱셈 관계를 다시 확인하세요.";
-  showFeedback("다시 조사해 봐요. 규칙을 먼저 말로 설명하면 좋아요.", "bad");
+  detectiveLine.textContent = "HP가 줄었습니다. 변화량이나 곱셈 관계를 다시 살펴보세요.";
+  showFeedback("공격이 빗나갔습니다. 규칙을 먼저 말로 외치고 다시 시도하세요.", "bad");
 }
 
 function checkFinalAnswer(userAnswer) {
@@ -785,19 +789,19 @@ function checkFinalAnswer(userAnswer) {
   }
 
   state.attemptsLeft -= 1;
-  attemptBadge.textContent = `기회 ${state.attemptsLeft}번`;
+  attemptBadge.textContent = hpText();
   animateProblem("bad-shake");
 
   if (state.attemptsLeft <= 0) {
-    showFeedback("암호 순서가 맞지 않습니다. 장소를 조사한 순서대로 다시 읽어 보세요.", "bad");
-    detectiveLine.textContent = "암호 조각을 지도 순서대로 이어 붙이면 됩니다.";
+    showFeedback("보스 금고가 꿈쩍하지 않습니다. 월드맵 루트를 다시 확인하세요.", "bad");
+    detectiveLine.textContent = "암호 조각은 월드맵 순서대로 이어 붙이면 됩니다.";
     answerInput.disabled = true;
     hintButton.disabled = true;
     restartButton.classList.remove("hidden");
     return;
   }
 
-  showFeedback("암호 순서가 조금 달라요. 지도에 적힌 순서대로 다시 읽어 보세요.", "bad");
+  showFeedback("금고 장치가 흔들렸지만 열리진 않았습니다. 루트 순서를 다시 보세요.", "bad");
 }
 
 function collectLocationClueIfComplete(locationId) {
@@ -812,15 +816,15 @@ function showFeedback(message, tone) {
 
 function showHint() {
   if (state.finalMode) {
-    hintText.textContent = "힌트: 이동 지도 아래의 조사 순서대로 암호 조각을 읽으세요.";
-    detectiveLine.textContent = "시계탑부터 시작해서 화살표를 따라가면 됩니다.";
+    hintText.textContent = "NPC 힌트: 월드맵 아래의 모험 루트대로 암호 조각을 읽으세요.";
+    detectiveLine.textContent = "시계탑부터 시작해서 길을 따라가면 보스 금고가 열립니다.";
     return;
   }
 
   const mission = getCurrentMission();
   if (!mission) return;
   const hint = mission.hints[Math.min(state.hintIndex, mission.hints.length - 1)];
-  hintText.textContent = `힌트: ${hint}`;
+  hintText.textContent = `NPC 힌트: ${hint}`;
   detectiveLine.textContent = hint;
   state.hintIndex += 1;
 }

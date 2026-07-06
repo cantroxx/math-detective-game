@@ -10,31 +10,31 @@
     <main class="app">
       <section class="hero-panel">
         <div class="hero-copy">
-          <p class="eyebrow">초등 4학년 1학기 6단원</p>
-          <h1>규칙 탐정단</h1>
-          <p class="hero-line">마을 곳곳의 수학 단서를 모아 마지막 금고 암호를 여세요.</p>
+          <p class="eyebrow">Chapter 1 · 사라진 암호</p>
+          <h1>규칙 탐정단 RPG</h1>
+          <p class="hero-line">수상한 마을을 탐험하고, 규칙 몬스터가 숨긴 암호 조각을 되찾으세요.</p>
         </div>
 
         <div class="hud" aria-label="게임 진행 정보">
           <div>
-            <span>해결</span>
+            <span>퀘스트</span>
             <strong id="stageLabel">0 / 24</strong>
           </div>
           <div>
-            <span>별</span>
+            <span>배지</span>
             <strong id="starsLabel">0개</strong>
           </div>
           <div>
-            <span>암호</span>
+            <span>암호 조각</span>
             <strong id="codeLabel">------</strong>
           </div>
         </div>
 
         <div class="case-ribbon" aria-label="사건 요약">
-          <span><b>01</b> 지도 이동</span>
-          <span><b>06</b> 암호 조각</span>
-          <span><b>24</b> 수학 단서</span>
-          <span><b>FIN</b> 금고 해제</span>
+          <span><b>START</b> 마을 입장</span>
+          <span><b>6 MAP</b> 장소 해금</span>
+          <span><b>24 Q</b> 퀘스트</span>
+          <span><b>BOSS</b> 금고전</span>
         </div>
       </section>
 
@@ -42,16 +42,16 @@
         <section class="map-panel" aria-label="사건 지도">
           <div class="panel-heading">
             <div>
-              <p class="eyebrow">이동 지도</p>
-              <h2>수상한 마을</h2>
+              <p class="eyebrow">World Map</p>
+              <h2>수상한 마을 월드맵</h2>
             </div>
-            <span id="mapStatus" class="map-status">첫 장소 조사 중</span>
+            <span id="mapStatus" class="map-status">첫 장소 입장</span>
           </div>
 
           <div id="worldMap" class="world-map"></div>
 
           <div class="route-note">
-            <span>조사 순서</span>
+            <span>모험 루트</span>
             <strong id="routeLabel">시계탑 → 시장 → 도서관 → 정거장 → 연구소 → 금고실</strong>
           </div>
         </section>
@@ -60,16 +60,16 @@
           <div class="detective-card">
             <div class="mascot" aria-hidden="true">🕵️</div>
             <div>
-              <strong>단서 메모</strong>
-              <p id="detectiveLine">지도에서 열린 장소를 선택하고 첫 단서를 조사하세요.</p>
+              <strong>NPC 무전</strong>
+              <p id="detectiveLine">열린 장소로 이동해서 첫 퀘스트를 시작하세요.</p>
             </div>
           </div>
 
           <div class="type-legend" aria-label="문제 유형">
-            <span><i>123</i> 숫자</span>
-            <span><i>표</i> 관계</span>
-            <span><i>◆</i> 도형</span>
-            <span><i>?</i> 문장</span>
+            <span><i>123</i> 수열 스킬</span>
+            <span><i>표</i> 관계 스킬</span>
+            <span><i>◆</i> 도형 스킬</span>
+            <span><i>?</i> 추리 스킬</span>
           </div>
 
           <div class="inventory">
@@ -86,7 +86,7 @@
         <div class="mission-topline">
           <span id="locationBadge" class="location-badge">시계탑</span>
           <span id="typeBadge" class="type-badge">숫자 규칙</span>
-          <span id="attemptBadge" class="attempt">기회 3번</span>
+          <span id="attemptBadge" class="attempt">HP ♥♥♥</span>
         </div>
 
         <div class="mission-copy">
@@ -98,17 +98,17 @@
         <div id="problemArea" class="problem-area"></div>
 
         <form id="answerForm" class="answer-form">
-          <label for="answerInput">정답</label>
+          <label for="answerInput">추리 입력</label>
           <div class="answer-row">
             <input id="answerInput" autocomplete="off" inputmode="numeric" />
-            <button id="submitButton" type="submit">조사</button>
+            <button id="submitButton" type="submit">단서 제출</button>
           </div>
         </form>
 
         <div class="actions">
-          <button id="hintButton" type="button" class="secondary">힌트</button>
-          <button id="nextButton" type="button" class="secondary" disabled>다음 단서</button>
-          <button id="restartButton" type="button" class="secondary hidden">처음부터</button>
+          <button id="hintButton" type="button" class="secondary">NPC 힌트</button>
+          <button id="nextButton" type="button" class="secondary" disabled>다음 퀘스트</button>
+          <button id="restartButton" type="button" class="secondary hidden">새 모험</button>
         </div>
 
         <p id="feedback" class="feedback"></p>
