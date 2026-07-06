@@ -8,47 +8,63 @@
   </head>
   <body>
     <main class="app">
-      <section class="top-panel">
-        <div>
+      <section class="hero-panel">
+        <div class="hero-copy">
           <p class="eyebrow">초등 4학년 1학기 6단원</p>
           <h1>규칙 탐정단</h1>
+          <p class="hero-line">사라진 수와 도형 단서를 찾아 사건 지도를 완성하세요.</p>
         </div>
+
         <div class="score-board" aria-label="현재 점수">
           <span id="stageLabel">1 / 10</span>
           <strong id="starsLabel">별 0개</strong>
         </div>
       </section>
 
-      <section class="mission-panel" aria-live="polite">
-        <div class="mission-header">
-          <span id="typeBadge" class="badge">숫자 규칙</span>
-          <span id="attemptBadge" class="attempt">기회 3번</span>
-        </div>
-
-        <h2 id="missionTitle">문제를 불러오는 중...</h2>
-        <p id="missionStory" class="story"></p>
-
-        <div id="problemArea" class="problem-area"></div>
-
-        <form id="answerForm" class="answer-form">
-          <label for="answerInput">정답</label>
-          <div class="answer-row">
-            <input id="answerInput" autocomplete="off" inputmode="numeric" />
-            <button type="submit">확인</button>
+      <section class="game-layout">
+        <aside class="detective-panel" aria-label="탐정 조수">
+          <div class="mascot" aria-hidden="true">🕵️</div>
+          <div class="speech-bubble">
+            <strong>단서 메모</strong>
+            <p id="detectiveLine">첫 사건이에요. 수가 어떻게 변하는지 살펴보세요.</p>
           </div>
-        </form>
+        </aside>
 
-        <div class="actions">
-          <button id="hintButton" type="button" class="secondary">힌트</button>
-          <button id="nextButton" type="button" class="secondary" disabled>다음</button>
-        </div>
+        <section class="mission-panel" aria-live="polite">
+          <div class="mission-header">
+            <span id="typeBadge" class="badge">숫자 규칙</span>
+            <span id="attemptBadge" class="attempt">기회 3번</span>
+          </div>
 
-        <p id="feedback" class="feedback"></p>
-        <p id="hintText" class="hint"></p>
+          <h2 id="missionTitle">문제를 불러오는 중...</h2>
+          <p id="missionStory" class="story"></p>
+
+          <div id="problemArea" class="problem-area"></div>
+
+          <form id="answerForm" class="answer-form">
+            <label for="answerInput">정답</label>
+            <div class="answer-row">
+              <input id="answerInput" autocomplete="off" inputmode="numeric" />
+              <button type="submit">확인</button>
+            </div>
+          </form>
+
+          <div class="actions">
+            <button id="hintButton" type="button" class="secondary">힌트</button>
+            <button id="nextButton" type="button" class="secondary" disabled>다음</button>
+            <button id="restartButton" type="button" class="secondary hidden">처음부터</button>
+          </div>
+
+          <p id="feedback" class="feedback"></p>
+          <p id="hintText" class="hint"></p>
+        </section>
       </section>
 
       <section class="progress-panel">
-        <h2>탐정 수첩</h2>
+        <div class="section-title">
+          <h2>사건 지도</h2>
+          <span>해결한 단서에 도장이 찍혀요</span>
+        </div>
         <div id="notebook" class="notebook"></div>
       </section>
     </main>
