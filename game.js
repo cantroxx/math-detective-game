@@ -474,6 +474,7 @@ function renderMap() {
   });
 
   locations.forEach((location) => {
+    const locationNumber = locations.findIndex((item) => item.id === location.id) + 1;
     const missionsInLocation = getLocationMissions(location.id);
     const solvedInLocation = missionsInLocation.filter((mission) => state.solved.has(mission.id)).length;
     const unlocked = isLocationUnlocked(location.id);
@@ -491,9 +492,10 @@ function renderMap() {
     node.style.left = `${location.x}%`;
     node.style.top = `${location.y}%`;
     node.innerHTML = `
+      <span class="node-index">${String(locationNumber).padStart(2, "0")}</span>
       <span class="icon" aria-hidden="true">${location.icon}</span>
       <strong>${location.name}</strong>
-      <span>${unlocked ? `${solvedInLocation}/${missionsInLocation.length} 단서` : "잠김"}</span>
+      <span class="node-meta">${unlocked ? `${solvedInLocation}/${missionsInLocation.length} 단서` : "잠김"}</span>
     `;
     node.addEventListener("click", () => selectLocation(location.id));
     worldMap.appendChild(node);
