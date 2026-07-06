@@ -116,6 +116,25 @@ const state = {
   solved: Array(missions.length).fill(false),
 };
 
+const missionIcons = {
+  numbers: "🔢",
+  shapes: "🔺",
+  table: "📋",
+};
+
+const detectiveLines = [
+  "첫 사건이에요. 수가 어떻게 변하는지 살펴보세요.",
+  "문이 잠겨 있어요. 이번 단서는 곱하기일지도 몰라요.",
+  "도형의 개수를 세며 규칙을 찾아봅시다.",
+  "표는 비밀 장부 같아요. 가로와 세로를 함께 보세요.",
+  "가격표 속 관계식을 찾으면 사건이 빨리 풀려요.",
+  "생활 속 수학 단서입니다. 한 개가 늘 때 무엇이 함께 늘까요?",
+  "이번에는 수가 줄어듭니다. 계단을 거꾸로 내려가 봐요.",
+  "필요한 길이를 계산하면 리본 단서가 열립니다.",
+  "삼각형들이 줄을 맞춰 움직이고 있어요.",
+  "마지막 암호입니다. 침착하게 관계식을 확인하세요.",
+];
+
 const stageLabel = document.querySelector("#stageLabel");
 const starsLabel = document.querySelector("#starsLabel");
 const typeBadge = document.querySelector("#typeBadge");
@@ -127,9 +146,11 @@ const answerForm = document.querySelector("#answerForm");
 const answerInput = document.querySelector("#answerInput");
 const hintButton = document.querySelector("#hintButton");
 const nextButton = document.querySelector("#nextButton");
+const restartButton = document.querySelector("#restartButton");
 const feedback = document.querySelector("#feedback");
 const hintText = document.querySelector("#hintText");
 const notebook = document.querySelector("#notebook");
+const detectiveLine = document.querySelector("#detectiveLine");
 
 function renderMission() {
   const mission = missions[state.current];
@@ -146,9 +167,12 @@ function renderMission() {
   answerInput.disabled = false;
   hintButton.disabled = false;
   nextButton.disabled = true;
+  restartButton.classList.add("hidden");
   feedback.textContent = "";
   feedback.className = "feedback";
   hintText.textContent = "";
+  detectiveLine.textContent = detectiveLines[state.current];
+  problemArea.className = "problem-area";
 
   problemArea.innerHTML = "";
   if (mission.view === "numbers") renderNumbers(mission.data);
@@ -217,7 +241,8 @@ function renderNotebook() {
   missions.forEach((mission, index) => {
     const note = document.createElement("div");
     note.className = state.solved[index] ? "note done" : "note";
-    note.textContent = state.solved[index] ? "해결" : `${index + 1}번`;
+    note.dataset.icon = state.solved[index] ? "★" : missionIcons[mission.view];
+    note.textContent = `${index + 1}번`;
     note.title = mission.rule;
     notebook.appendChild(note);
   });
@@ -243,6 +268,9 @@ function checkAnswer(event) {
     state.solved[state.current] = true;
     starsLabel.textContent = `별 ${state.stars}개`;
     showFeedback(`정답입니다! ${mission.rule}을 찾아냈어요. 별 ${earned}개 획득!`, "good");
+    detectiveLine.textContent = "좋아요! 단서가 사건 지도에 기록됐어요.";
+    animateProblem("good-pop");
+    launchSparkles();
     answerInput.disabled = true;
     hintButton.disabled = true;
     nextButton.disabled = false;
@@ -252,15 +280,18 @@ function checkAnswer(event) {
 
   state.attemptsLeft -= 1;
   attemptBadge.textContent = `기회 ${state.attemptsLeft}번`;
+  animateProblem("bad-shake");
 
   if (state.attemptsLeft <= 0) {
     showFeedback(`아쉬워요. 정답은 ${mission.answer}입니다. 규칙은 '${mission.rule}'이에요.`, "bad");
+    detectiveLine.textContent = "괜찮아요. 정답을 보고 규칙을 한 번 더 말해보면 실력이 올라가요.";
     answerInput.disabled = true;
     hintButton.disabled = true;
     nextButton.disabled = false;
     return;
   }
 
+  detectiveLine.textContent = "아직 단서가 남아 있어요. 변화량을 다시 비교해 봅시다.";
   showFeedback("다시 생각해 봐요. 규칙을 먼저 말로 설명해 보면 좋아요.", "bad");
 }
 
@@ -273,20 +304,31 @@ function showHint() {
   const mission = missions[state.current];
   const hint = mission.hints[Math.min(state.hintIndex, mission.hints.length - 1)];
   hintText.textContent = `힌트: ${hint}`;
+  detectiveLine.textContent = hint;
   state.hintIndex += 1;
 }
 
 function goNext() {
   if (state.current === missions.length - 1) {
     const perfect = missions.length * 3;
-    problemArea.innerHTML = `<div class="number-row"><span class="tile">완료</span><span class="tile">${state.stars}/${perfect}</span></div>`;
+    const rank = getRank(state.stars, perfect);
+    problemArea.innerHTML = `
+      <div class="certificate">
+        <div class="medal">🏅</div>
+        <strong>${rank}</strong>
+        <p>획득한 별: ${state.stars}/${perfect}</p>
+      </div>
+    `;
     missionTitle.textContent = "사건 해결!";
     missionStory.textContent = "모든 규칙 단서를 찾아냈습니다. 탐정 수첩을 보며 다시 연습해 보세요.";
     answerInput.disabled = true;
     hintButton.disabled = true;
     nextButton.disabled = true;
+    restartButton.classList.remove("hidden");
+    detectiveLine.textContent = `${rank} 인증 완료! 다시 도전하면 별을 더 모을 수 있어요.`;
     feedback.textContent = "규칙 탐정단 인증서를 획득!";
     feedback.className = "feedback good";
+    launchSparkles(14);
     return;
   }
 
@@ -294,8 +336,44 @@ function goNext() {
   renderMission();
 }
 
+function getRank(stars, perfect) {
+  if (stars >= perfect - 5) return "전설의 규칙 탐정";
+  if (stars >= Math.ceil(perfect * 0.6)) return "명탐정";
+  return "수습 탐정";
+}
+
+function animateProblem(className) {
+  problemArea.classList.remove("good-pop", "bad-shake");
+  void problemArea.offsetWidth;
+  problemArea.classList.add(className);
+}
+
+function launchSparkles(count = 8) {
+  const rect = problemArea.getBoundingClientRect();
+  for (let i = 0; i < count; i += 1) {
+    const spark = document.createElement("span");
+    spark.className = "spark";
+    spark.textContent = i % 3 === 0 ? "★" : "✦";
+    spark.style.left = `${rect.left + rect.width * (0.2 + Math.random() * 0.6)}px`;
+    spark.style.top = `${rect.top + rect.height * (0.25 + Math.random() * 0.4)}px`;
+    spark.style.color = i % 2 === 0 ? "#f6b82d" : "#2563eb";
+    document.body.appendChild(spark);
+    spark.addEventListener("animationend", () => spark.remove());
+  }
+}
+
+function restartGame() {
+  state.current = 0;
+  state.stars = 0;
+  state.attemptsLeft = 3;
+  state.hintIndex = 0;
+  state.solved = Array(missions.length).fill(false);
+  renderMission();
+}
+
 answerForm.addEventListener("submit", checkAnswer);
 hintButton.addEventListener("click", showHint);
 nextButton.addEventListener("click", goNext);
+restartButton.addEventListener("click", restartGame);
 
 renderMission();
