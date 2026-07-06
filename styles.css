@@ -17,8 +17,13 @@
   --coral: #e35f4f;
   --coral-soft: #ffe8df;
   --plum: #6858c7;
-  --shadow: 0 18px 42px rgba(16, 32, 51, 0.13);
-  --soft-shadow: 0 8px 18px rgba(16, 32, 51, 0.09);
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 26px;
+  --radius-xl: 34px;
+  --radius-pill: 999px;
+  --shadow: 0 18px 46px rgba(16, 32, 51, 0.12);
+  --soft-shadow: 0 10px 22px rgba(16, 32, 51, 0.09);
 }
 
 * {
@@ -56,7 +61,7 @@ input {
 button {
   min-height: 48px;
   border: 0;
-  border-radius: 8px;
+  border-radius: var(--radius-pill);
   padding: 0 18px;
   color: #ffffff;
   background: var(--blue);
@@ -103,7 +108,7 @@ button.secondary {
 .detective-card,
 .inventory {
   border: 1px solid rgba(213, 223, 235, 0.95);
-  border-radius: 8px;
+  border-radius: var(--radius-xl);
   background: var(--panel);
   box-shadow: var(--shadow);
 }
@@ -118,6 +123,7 @@ button.secondary {
   padding: clamp(22px, 4vw, 38px);
   margin-bottom: 18px;
   overflow: hidden;
+  isolation: isolate;
   background:
     linear-gradient(100deg, rgba(255, 255, 255, 0.98), rgba(255, 250, 236, 0.86)),
     repeating-linear-gradient(90deg, rgba(36, 99, 216, 0.08) 0 1px, transparent 1px 34px);
@@ -185,7 +191,7 @@ h1 {
   align-content: center;
   padding: 13px 14px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   background: #ffffff;
   box-shadow: var(--soft-shadow);
 }
@@ -222,7 +228,7 @@ h1 {
   align-items: center;
   gap: 8px;
   border: 1px solid rgba(159, 178, 199, 0.8);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 8px 10px;
   background: rgba(255, 255, 255, 0.88);
   color: var(--muted);
@@ -235,7 +241,7 @@ h1 {
   min-height: 26px;
   display: inline-grid;
   place-items: center;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   color: #ffffff;
   background: var(--ink);
   font-size: 0.78rem;
@@ -284,7 +290,7 @@ h1 {
 
 .map-status,
 #clueCount {
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 7px 10px;
   color: var(--ink);
   background: #eef4f8;
@@ -296,7 +302,7 @@ h1 {
   position: relative;
   min-height: 530px;
   border: 2px solid var(--line-strong);
-  border-radius: 8px;
+  border-radius: var(--radius-xl);
   background:
     linear-gradient(120deg, rgba(255, 255, 255, 0.84), rgba(255, 248, 228, 0.82)),
     repeating-linear-gradient(90deg, transparent 0 35px, rgba(36, 99, 216, 0.075) 35px 36px),
@@ -327,7 +333,7 @@ h1 {
 .map-path {
   position: absolute;
   height: 5px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: repeating-linear-gradient(90deg, rgba(16, 32, 51, 0.38) 0 12px, transparent 12px 20px);
   transform-origin: left center;
 }
@@ -337,7 +343,7 @@ h1 {
   width: 148px;
   min-height: 122px;
   border: 2px solid #d9e2eb;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   padding: 12px;
   color: var(--ink);
   background: rgba(255, 255, 255, 0.96);
@@ -377,7 +383,7 @@ h1 {
   display: inline-grid;
   place-items: center;
   border: 2px solid #ffffff;
-  border-radius: 7px;
+  border-radius: var(--radius-pill);
   color: #ffffff;
   background: var(--ink);
   font-size: 0.78rem;
@@ -409,7 +415,7 @@ h1 {
   gap: 12px;
   margin-top: 12px;
   padding: 12px 14px;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   background: #f7fafc;
   border: 1px solid var(--line);
 }
@@ -440,7 +446,7 @@ h1 {
   display: grid;
   place-items: center;
   border: 1px solid rgba(240, 177, 62, 0.55);
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   background:
     linear-gradient(145deg, rgba(255, 242, 200, 0.96), rgba(223, 244, 240, 0.88));
   font-size: 3rem;
@@ -473,7 +479,7 @@ h1 {
   align-items: center;
   gap: 8px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   padding: 8px 10px;
   background: rgba(255, 255, 255, 0.9);
   color: var(--muted);
@@ -485,7 +491,7 @@ h1 {
   min-height: 28px;
   display: inline-grid;
   place-items: center;
-  border-radius: 6px;
+  border-radius: var(--radius-pill);
   color: #ffffff;
   background: var(--teal);
   font-style: normal;
@@ -517,7 +523,7 @@ h1 {
   min-height: 50px;
   padding: 8px 10px;
   border: 1px solid #dfe7ee;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   background: #f8fafc;
   color: var(--muted);
   font-weight: 900;
@@ -533,7 +539,7 @@ h1 {
   display: grid;
   place-items: center;
   min-height: 34px;
-  border-radius: 8px;
+  border-radius: var(--radius-pill);
   color: #ffffff;
   background: var(--plum);
 }
@@ -558,7 +564,7 @@ h1 {
   display: inline-flex;
   align-items: center;
   min-height: 34px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 6px 12px;
   font-weight: 1000;
 }
@@ -598,7 +604,7 @@ h1 {
   display: grid;
   place-items: center;
   border: 2px dashed var(--line-strong);
-  border-radius: 8px;
+  border-radius: var(--radius-xl);
   background:
     linear-gradient(0deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)),
     repeating-linear-gradient(90deg, transparent 0 28px, rgba(36, 99, 216, 0.065) 28px 29px),
@@ -622,6 +628,11 @@ h1 {
   padding: 18px;
 }
 
+.table-wrap {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
 .number-row,
 .shape-row {
   display: flex;
@@ -637,7 +648,7 @@ h1 {
   display: inline-grid;
   place-items: center;
   border: 2px solid #b9cddd;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   background: #ffffff;
   box-shadow: 0 5px 0 rgba(16, 32, 51, 0.08);
   font-size: 1.35rem;
@@ -693,7 +704,7 @@ th {
   align-items: center;
   justify-content: center;
   min-height: 42px;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   padding: 8px 12px;
   background: #f0f6ff;
 }
@@ -712,7 +723,7 @@ input {
   width: min(100%, 430px);
   min-height: 50px;
   border: 2px solid #b8cad7;
-  border-radius: 8px;
+  border-radius: var(--radius-pill);
   padding: 0 14px;
   font-size: 1.16rem;
   background: #ffffff;
@@ -756,7 +767,7 @@ input:focus {
   margin: 8px auto;
   padding: clamp(20px, 5vw, 34px);
   border: 2px solid rgba(240, 177, 62, 0.82);
-  border-radius: 8px;
+  border-radius: var(--radius-xl);
   background:
     linear-gradient(135deg, rgba(255, 242, 200, 0.82), rgba(223, 244, 240, 0.76)),
     #fffdf7;
