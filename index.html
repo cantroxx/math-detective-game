@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>규칙 탐정단</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="top-panel">
+        <div>
+          <p class="eyebrow">초등 4학년 1학기 6단원</p>
+          <h1>규칙 탐정단</h1>
+        </div>
+        <div class="score-board" aria-label="현재 점수">
+          <span id="stageLabel">1 / 10</span>
+          <strong id="starsLabel">별 0개</strong>
+        </div>
+      </section>
+
+      <section class="mission-panel" aria-live="polite">
+        <div class="mission-header">
+          <span id="typeBadge" class="badge">숫자 규칙</span>
+          <span id="attemptBadge" class="attempt">기회 3번</span>
+        </div>
+
+        <h2 id="missionTitle">문제를 불러오는 중...</h2>
+        <p id="missionStory" class="story"></p>
+
+        <div id="problemArea" class="problem-area"></div>
+
+        <form id="answerForm" class="answer-form">
+          <label for="answerInput">정답</label>
+          <div class="answer-row">
+            <input id="answerInput" autocomplete="off" inputmode="numeric" />
+            <button type="submit">확인</button>
+          </div>
+        </form>
+
+        <div class="actions">
+          <button id="hintButton" type="button" class="secondary">힌트</button>
+          <button id="nextButton" type="button" class="secondary" disabled>다음</button>
+        </div>
+
+        <p id="feedback" class="feedback"></p>
+        <p id="hintText" class="hint"></p>
+      </section>
+
+      <section class="progress-panel">
+        <h2>탐정 수첩</h2>
+        <div id="notebook" class="notebook"></div>
+      </section>
+    </main>
+
+    <script src="game.js"></script>
+  </body>
+</html>
