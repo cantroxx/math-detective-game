@@ -1,186 +1,242 @@
+const locations = [
+  { id: "clock", name: "시계탑", icon: "🕰️", clue: "3", x: 8, y: 18, line: "시계탑의 숫자판이 어긋났어요. 일정하게 움직이는 수를 찾으세요." },
+  { id: "market", name: "시장 골목", icon: "🧺", clue: "1", x: 36, y: 12, line: "시장에는 가격표 단서가 많아요. 수량과 가격의 관계를 보세요." },
+  { id: "library", name: "도서관", icon: "📚", clue: "4", x: 66, y: 22, line: "도서관의 책장 번호가 규칙대로 놓여 있어요." },
+  { id: "station", name: "정거장", icon: "🚉", clue: "1", x: 18, y: 60, line: "정거장 시간표와 좌석표에서 관계식을 찾아봅시다." },
+  { id: "lab", name: "연구소", icon: "🧪", clue: "5", x: 52, y: 64, line: "연구소 단서는 조금 더 까다롭습니다. 두 단계 규칙도 확인하세요." },
+  { id: "vault", name: "금고실", icon: "🔐", clue: "9", x: 78, y: 56, line: "마지막 장소입니다. 여기까지 모은 규칙을 모두 사용해요." },
+];
+
 const missions = [
-  {
-    type: "숫자 규칙",
-    title: "사라진 숫자 순서",
-    story: "앞의 수와 뒤의 수를 비교해서 빈칸에 들어갈 수를 찾아보세요.",
-    view: "numbers",
-    data: [3, 6, 9, 12, null],
-    answer: "15",
-    hints: ["수가 일정하게 커지고 있어요.", "앞의 수보다 3씩 커집니다.", "12보다 3 큰 수를 쓰면 됩니다."],
-    rule: "3씩 커지는 규칙",
-  },
-  {
-    type: "숫자 규칙",
-    title: "두 배로 커지는 문",
-    story: "숫자 문을 열려면 다음 수를 맞혀야 합니다.",
-    view: "numbers",
-    data: [2, 4, 8, 16, null],
-    answer: "32",
-    hints: ["더하기보다 곱하기 규칙을 생각해 보세요.", "앞의 수에 2를 곱합니다.", "16의 2배는 32입니다."],
-    rule: "2배씩 커지는 규칙",
-  },
-  {
-    type: "도형 규칙",
-    title: "별 공장의 주문",
-    story: "별이 몇 개씩 늘어나는지 살펴보고 마지막 칸의 별 개수를 쓰세요.",
-    view: "shapes",
-    shape: "★",
-    data: [1, 3, 5, null],
-    answer: "7",
-    hints: ["별의 개수가 일정하게 늘어납니다.", "1개, 3개, 5개처럼 2개씩 늘어요.", "5보다 2 큰 수를 쓰면 됩니다."],
-    rule: "별이 2개씩 늘어나는 규칙",
-  },
-  {
-    type: "표와 관계",
-    title: "사과 상자 계산",
-    story: "사과 한 상자에는 사과가 4개씩 들어 있습니다. 5상자에는 사과가 몇 개일까요?",
-    view: "table",
-    headers: ["상자 수", "1", "2", "3", "4", "5"],
-    rows: [["사과 수", "4", "8", "12", "16", "?"]],
-    answer: "20",
-    hints: ["상자 수가 1 늘면 사과는 4개 늘어요.", "사과 수는 상자 수에 4를 곱한 값입니다.", "5 x 4를 계산해 보세요."],
-    rule: "사과 수 = 상자 수 x 4",
-  },
-  {
-    type: "관계식",
-    title: "간식 가게의 가격표",
-    story: "간식 한 개의 가격은 700원입니다. 간식 6개의 가격을 구하세요.",
-    view: "table",
-    headers: ["간식 수", "1", "2", "3", "4", "6"],
-    rows: [["가격", "700", "1400", "2100", "2800", "?"]],
-    answer: "4200",
-    hints: ["간식이 1개 늘 때마다 700원씩 늘어요.", "가격은 간식 수에 700을 곱한 값입니다.", "6 x 700을 계산해 보세요."],
-    rule: "가격 = 간식 수 x 700",
-  },
-  {
-    type: "생활 속 관계",
-    title: "의자 다리의 비밀",
-    story: "의자 1개에는 다리가 4개 있습니다. 의자 8개의 다리는 모두 몇 개일까요?",
-    view: "table",
-    headers: ["의자 수", "1", "2", "3", "8"],
-    rows: [["다리 수", "4", "8", "12", "?"]],
-    answer: "32",
-    hints: ["의자가 1개 늘면 다리가 4개 늘어요.", "다리 수는 의자 수에 4를 곱합니다.", "8 x 4를 계산해 보세요."],
-    rule: "다리 수 = 의자 수 x 4",
-  },
-  {
-    type: "숫자 규칙",
-    title: "아래로 걷는 계단",
-    story: "이번에는 수가 작아집니다. 빈칸에 들어갈 수를 찾으세요.",
-    view: "numbers",
-    data: [50, 45, 40, 35, null],
-    answer: "30",
-    hints: ["수가 일정하게 작아지고 있어요.", "앞의 수보다 5씩 작아집니다.", "35보다 5 작은 수를 쓰면 됩니다."],
-    rule: "5씩 작아지는 규칙",
-  },
-  {
-    type: "표와 관계",
-    title: "리본 자르기",
-    story: "상자 1개를 꾸미려면 리본 3m가 필요합니다. 상자 9개에는 리본이 몇 m 필요할까요?",
-    view: "table",
-    headers: ["상자 수", "1", "2", "3", "9"],
-    rows: [["리본 길이(m)", "3", "6", "9", "?"]],
-    answer: "27",
-    hints: ["상자 수가 1 늘면 리본은 3m 늘어요.", "리본 길이는 상자 수에 3을 곱합니다.", "9 x 3을 계산해 보세요."],
-    rule: "리본 길이 = 상자 수 x 3",
-  },
-  {
-    type: "도형 규칙",
-    title: "삼각형 행렬",
-    story: "삼각형이 줄마다 3개씩 늘어납니다. 마지막 칸의 삼각형 개수를 쓰세요.",
-    view: "shapes",
-    shape: "▲",
-    data: [2, 5, 8, null],
-    answer: "11",
-    hints: ["도형 개수가 일정하게 늘어납니다.", "2, 5, 8은 3씩 커집니다.", "8보다 3 큰 수를 쓰면 됩니다."],
-    rule: "도형이 3개씩 늘어나는 규칙",
-  },
-  {
-    type: "관계식",
-    title: "마지막 암호",
-    story: "입장권 1장의 가격은 2500원입니다. 입장권 4장의 가격을 구하면 마지막 문이 열립니다.",
-    view: "table",
-    headers: ["입장권 수", "1", "2", "3", "4"],
-    rows: [["가격", "2500", "5000", "7500", "?"]],
-    answer: "10000",
-    hints: ["입장권 수와 가격은 함께 늘어납니다.", "가격은 입장권 수에 2500을 곱합니다.", "4 x 2500을 계산해 보세요."],
-    rule: "가격 = 입장권 수 x 2500",
-  },
+  { id: "clock-1", locationId: "clock", type: "숫자 규칙", title: "멈춘 분침", story: "분침이 5분씩 움직이다가 마지막 칸에서 멈췄습니다.", view: "numbers", data: [5, 10, 15, 20, null], answer: "25", hints: ["앞의 수와 뒤의 수 차이를 보세요.", "5씩 커지고 있어요.", "20보다 5 큰 수입니다."], rule: "5씩 커지는 규칙" },
+  { id: "clock-2", locationId: "clock", type: "숫자 규칙", title: "거꾸로 도는 초침", story: "초침이 같은 간격으로 거꾸로 움직입니다.", view: "numbers", data: [48, 42, 36, 30, null], answer: "24", hints: ["수가 점점 작아집니다.", "6씩 작아져요.", "30보다 6 작은 수입니다."], rule: "6씩 작아지는 규칙" },
+  { id: "clock-3", locationId: "clock", type: "표와 관계", title: "종소리 횟수", story: "시계탑은 1시간마다 종을 2번씩 더 칩니다. 6시간에는 몇 번 칠까요?", view: "table", headers: ["시간", "1", "2", "3", "6"], rows: [["종소리", "2", "4", "6", "?"]], answer: "12", hints: ["시간이 1 늘면 종소리가 2 늘어요.", "시간에 2를 곱합니다.", "6 x 2를 계산하세요."], rule: "종소리 = 시간 x 2" },
+  { id: "clock-4", locationId: "clock", type: "도형 규칙", title: "시계 장식", story: "시계 장식의 별이 3개씩 늘어납니다.", view: "shapes", shape: "★", data: [2, 5, 8, null], answer: "11", hints: ["도형 개수의 차이를 보세요.", "3개씩 늘어납니다.", "8보다 3 큰 수입니다."], rule: "별이 3개씩 늘어나는 규칙" },
+  { id: "market-1", locationId: "market", type: "생활 속 관계", title: "사과 상자", story: "사과 한 상자에는 4개가 들어 있습니다. 7상자에는 몇 개일까요?", view: "table", headers: ["상자", "1", "2", "3", "7"], rows: [["사과", "4", "8", "12", "?"]], answer: "28", hints: ["상자 수와 사과 수가 함께 늘어요.", "상자 수에 4를 곱합니다.", "7 x 4입니다."], rule: "사과 수 = 상자 수 x 4" },
+  { id: "market-2", locationId: "market", type: "관계식", title: "떡꼬치 가격", story: "떡꼬치 1개는 700원입니다. 8개 가격은 얼마일까요?", view: "table", headers: ["개수", "1", "2", "4", "8"], rows: [["가격", "700", "1400", "2800", "?"]], answer: "5600", hints: ["개수가 2배가 되면 가격도 2배입니다.", "개수에 700을 곱합니다.", "8 x 700입니다."], rule: "가격 = 개수 x 700" },
+  { id: "market-3", locationId: "market", type: "숫자 규칙", title: "할인 쿠폰 번호", story: "쿠폰 번호가 일정한 규칙으로 커집니다.", view: "numbers", data: [12, 16, 20, 24, null], answer: "28", hints: ["차이가 모두 같습니다.", "4씩 커집니다.", "24보다 4 큰 수입니다."], rule: "4씩 커지는 규칙" },
+  { id: "market-4", locationId: "market", type: "문장 단서", title: "채소 가게 묶음", story: "오이는 한 묶음에 3개입니다. 9묶음이면 오이는 모두 몇 개일까요?", view: "riddle", lines: ["한 묶음 = 3개", "9묶음 = ?개"], answer: "27", hints: ["묶음 수가 1 늘 때마다 3개 늘어요.", "9에 3을 곱합니다.", "9 x 3 = 27"], rule: "전체 개수 = 묶음 수 x 3" },
+  { id: "library-1", locationId: "library", type: "숫자 규칙", title: "책장 번호", story: "책장 번호가 11씩 커지고 있습니다.", view: "numbers", data: [14, 25, 36, 47, null], answer: "58", hints: ["앞뒤 차이를 계산하세요.", "11씩 커집니다.", "47보다 11 큰 수입니다."], rule: "11씩 커지는 규칙" },
+  { id: "library-2", locationId: "library", type: "표와 관계", title: "책 묶음 정리", story: "한 칸에 책 6권씩 꽂습니다. 9칸에는 몇 권을 꽂을까요?", view: "table", headers: ["칸", "1", "2", "5", "9"], rows: [["책", "6", "12", "30", "?"]], answer: "54", hints: ["칸 수에 6을 곱합니다.", "5칸은 30권이었어요.", "9 x 6입니다."], rule: "책 수 = 칸 수 x 6" },
+  { id: "library-3", locationId: "library", type: "도형 규칙", title: "책갈피 문양", story: "책갈피의 삼각형이 4개씩 늘어납니다.", view: "shapes", shape: "▲", data: [1, 5, 9, null], answer: "13", hints: ["1에서 5, 5에서 9로 갈 때 얼마나 늘었나요?", "4개씩 늘어납니다.", "9보다 4 큰 수입니다."], rule: "삼각형이 4개씩 늘어나는 규칙" },
+  { id: "library-4", locationId: "library", type: "문장 단서", title: "대출 카드", story: "하루에 8권씩 대출되었습니다. 5일 동안 대출된 책은 모두 몇 권일까요?", view: "riddle", lines: ["1일 = 8권", "5일 = ?권"], answer: "40", hints: ["같은 수가 여러 번 더해지는 상황입니다.", "5번 8을 더합니다.", "5 x 8입니다."], rule: "전체 권수 = 하루 권수 x 일수" },
+  { id: "station-1", locationId: "station", type: "숫자 규칙", title: "출발 시각", story: "열차가 같은 간격으로 출발합니다.", view: "numbers", data: [15, 30, 45, 60, null], answer: "75", hints: ["몇 분 간격인지 보세요.", "15씩 커집니다.", "60보다 15 큰 수입니다."], rule: "15씩 커지는 규칙" },
+  { id: "station-2", locationId: "station", type: "관계식", title: "좌석 줄", story: "한 줄에 좌석이 5개입니다. 12줄이면 좌석은 모두 몇 개일까요?", view: "table", headers: ["줄", "1", "2", "6", "12"], rows: [["좌석", "5", "10", "30", "?"]], answer: "60", hints: ["줄 수에 5를 곱합니다.", "6줄은 30석입니다.", "12 x 5입니다."], rule: "좌석 수 = 줄 수 x 5" },
+  { id: "station-3", locationId: "station", type: "숫자 규칙", title: "플랫폼 번호", story: "플랫폼 번호가 두 배씩 커집니다.", view: "numbers", data: [3, 6, 12, 24, null], answer: "48", hints: ["더하기가 아니라 곱하기 규칙입니다.", "앞의 수에 2를 곱합니다.", "24 x 2입니다."], rule: "2배씩 커지는 규칙" },
+  { id: "station-4", locationId: "station", type: "문장 단서", title: "승차권 묶음", story: "승차권 1묶음은 10장입니다. 13묶음은 몇 장일까요?", view: "riddle", lines: ["1묶음 = 10장", "13묶음 = ?장"], answer: "130", hints: ["10씩 늘어납니다.", "묶음 수에 10을 곱합니다.", "13 x 10입니다."], rule: "승차권 수 = 묶음 수 x 10" },
+  { id: "lab-1", locationId: "lab", type: "숫자 규칙", title: "시약 번호", story: "연구소의 시약 번호는 7씩 커집니다.", view: "numbers", data: [9, 16, 23, 30, null], answer: "37", hints: ["차이가 모두 같습니다.", "7씩 커집니다.", "30보다 7 큰 수입니다."], rule: "7씩 커지는 규칙" },
+  { id: "lab-2", locationId: "lab", type: "두 단계 규칙", title: "실험 기록", story: "수에 3을 곱해 다음 값을 만들었습니다.", view: "numbers", data: [1, 3, 9, 27, null], answer: "81", hints: ["더하기보다 곱하기를 생각하세요.", "앞의 수에 3을 곱합니다.", "27 x 3입니다."], rule: "3배씩 커지는 규칙" },
+  { id: "lab-3", locationId: "lab", type: "표와 관계", title: "비커 눈금", story: "비커 1개에는 물이 250mL 들어갑니다. 6개는 몇 mL일까요?", view: "table", headers: ["비커", "1", "2", "4", "6"], rows: [["물(mL)", "250", "500", "1000", "?"]], answer: "1500", hints: ["비커 수에 250을 곱합니다.", "4개는 1000mL입니다.", "6 x 250입니다."], rule: "물의 양 = 비커 수 x 250" },
+  { id: "lab-4", locationId: "lab", type: "도형 규칙", title: "분자 모형", story: "원 모양 분자가 5개씩 늘어납니다.", view: "shapes", shape: "●", data: [4, 9, 14, null], answer: "19", hints: ["4에서 9, 9에서 14의 차이를 보세요.", "5개씩 늘어납니다.", "14보다 5 큰 수입니다."], rule: "분자가 5개씩 늘어나는 규칙" },
+  { id: "vault-1", locationId: "vault", type: "숫자 규칙", title: "금고 계단", story: "금고 앞 계단 번호가 일정하게 작아집니다.", view: "numbers", data: [100, 90, 80, 70, null], answer: "60", hints: ["수가 줄어드는 규칙입니다.", "10씩 작아집니다.", "70보다 10 작은 수입니다."], rule: "10씩 작아지는 규칙" },
+  { id: "vault-2", locationId: "vault", type: "관계식", title: "열쇠 무게", story: "열쇠 1개의 무게는 120g입니다. 9개의 무게는 몇 g일까요?", view: "table", headers: ["열쇠", "1", "3", "6", "9"], rows: [["무게(g)", "120", "360", "720", "?"]], answer: "1080", hints: ["열쇠 수에 120을 곱합니다.", "6개는 720g입니다.", "9 x 120입니다."], rule: "무게 = 열쇠 수 x 120" },
+  { id: "vault-3", locationId: "vault", type: "도형 규칙", title: "문양 잠금장치", story: "잠금장치의 다이아몬드가 6개씩 늘어납니다.", view: "shapes", shape: "◆", data: [3, 9, 15, null], answer: "21", hints: ["도형 개수의 차이를 보세요.", "6개씩 늘어납니다.", "15보다 6 큰 수입니다."], rule: "다이아몬드가 6개씩 늘어나는 규칙" },
+  { id: "vault-4", locationId: "vault", type: "문장 단서", title: "마지막 봉인", story: "봉인 하나를 풀려면 별 4개가 필요합니다. 봉인 11개를 풀려면 별은 몇 개 필요할까요?", view: "riddle", lines: ["봉인 1개 = 별 4개", "봉인 11개 = 별 ?개"], answer: "44", hints: ["봉인 수에 4를 곱합니다.", "10개면 40개가 필요합니다.", "11 x 4입니다."], rule: "필요한 별 = 봉인 수 x 4" },
 ];
 
-const state = {
-  current: 0,
-  stars: 0,
-  attemptsLeft: 3,
-  hintIndex: 0,
-  solved: Array(missions.length).fill(false),
-};
-
-const missionIcons = {
-  numbers: "🔢",
-  shapes: "🔺",
-  table: "📋",
-};
-
-const detectiveLines = [
-  "첫 사건이에요. 수가 어떻게 변하는지 살펴보세요.",
-  "문이 잠겨 있어요. 이번 단서는 곱하기일지도 몰라요.",
-  "도형의 개수를 세며 규칙을 찾아봅시다.",
-  "표는 비밀 장부 같아요. 가로와 세로를 함께 보세요.",
-  "가격표 속 관계식을 찾으면 사건이 빨리 풀려요.",
-  "생활 속 수학 단서입니다. 한 개가 늘 때 무엇이 함께 늘까요?",
-  "이번에는 수가 줄어듭니다. 계단을 거꾸로 내려가 봐요.",
-  "필요한 길이를 계산하면 리본 단서가 열립니다.",
-  "삼각형들이 줄을 맞춰 움직이고 있어요.",
-  "마지막 암호입니다. 침착하게 관계식을 확인하세요.",
-];
+const finalAnswer = locations.map((location) => location.clue).join("");
+const state = { selectedLocationId: locations[0].id, stars: 0, attemptsLeft: 3, hintIndex: 0, solved: new Set(), collectedClues: new Set(), finalMode: false, finalSolved: false };
 
 const stageLabel = document.querySelector("#stageLabel");
 const starsLabel = document.querySelector("#starsLabel");
+const codeLabel = document.querySelector("#codeLabel");
+const mapStatus = document.querySelector("#mapStatus");
+const routeLabel = document.querySelector("#routeLabel");
+const worldMap = document.querySelector("#worldMap");
+const clueBoard = document.querySelector("#clueBoard");
+const clueCount = document.querySelector("#clueCount");
+const detectiveLine = document.querySelector("#detectiveLine");
+const locationBadge = document.querySelector("#locationBadge");
 const typeBadge = document.querySelector("#typeBadge");
 const attemptBadge = document.querySelector("#attemptBadge");
+const missionMeta = document.querySelector("#missionMeta");
 const missionTitle = document.querySelector("#missionTitle");
 const missionStory = document.querySelector("#missionStory");
 const problemArea = document.querySelector("#problemArea");
 const answerForm = document.querySelector("#answerForm");
 const answerInput = document.querySelector("#answerInput");
+const submitButton = document.querySelector("#submitButton");
 const hintButton = document.querySelector("#hintButton");
 const nextButton = document.querySelector("#nextButton");
 const restartButton = document.querySelector("#restartButton");
 const feedback = document.querySelector("#feedback");
 const hintText = document.querySelector("#hintText");
-const notebook = document.querySelector("#notebook");
-const detectiveLine = document.querySelector("#detectiveLine");
 
-function renderMission() {
-  const mission = missions[state.current];
-  state.attemptsLeft = 3;
-  state.hintIndex = 0;
+function getLocation(locationId) { return locations.find((location) => location.id === locationId); }
+function getLocationMissions(locationId) { return missions.filter((mission) => mission.locationId === locationId); }
+function isLocationComplete(locationId) { return getLocationMissions(locationId).every((mission) => state.solved.has(mission.id)); }
+function isLocationUnlocked(locationId) { const index = locations.findIndex((location) => location.id === locationId); return index === 0 || isLocationComplete(locations[index - 1].id); }
+function getCurrentMission() { return getLocationMissions(state.selectedLocationId).find((mission) => !state.solved.has(mission.id)); }
+function getSolvedCount() { return state.solved.size; }
+function resetAttemptState() { state.attemptsLeft = 3; state.hintIndex = 0; }
+function codeText() { return locations.map((location) => (state.collectedClues.has(location.id) ? location.clue : "-")).join(""); }
 
-  stageLabel.textContent = `${state.current + 1} / ${missions.length}`;
-  starsLabel.textContent = `별 ${state.stars}개`;
-  typeBadge.textContent = mission.type;
-  attemptBadge.textContent = "기회 3번";
-  missionTitle.textContent = mission.title;
-  missionStory.textContent = mission.story;
+function renderGame() {
+  const solvedCount = getSolvedCount();
+  stageLabel.textContent = `${solvedCount} / ${missions.length}`;
+  starsLabel.textContent = `${state.stars}개`;
+  codeLabel.textContent = codeText();
+  clueCount.textContent = `${state.collectedClues.size} / ${locations.length}`;
+  routeLabel.textContent = locations.map((location) => location.name).join(" → ");
+  renderMap();
+  renderClues();
+  if (state.finalSolved) return renderSolvedFinal();
+  if (state.finalMode || solvedCount === missions.length) { state.finalMode = true; return renderFinalMission(); }
+  const mission = getCurrentMission();
+  if (!mission) return renderLocationComplete();
+  renderMission(mission);
+}
+
+function renderMap() {
+  worldMap.innerHTML = "";
+  locations.slice(0, -1).forEach((location, index) => {
+    const next = locations[index + 1];
+    const path = document.createElement("span");
+    const startX = location.x + 7;
+    const startY = location.y + 9;
+    const endX = next.x + 7;
+    const endY = next.y + 9;
+    const dx = endX - startX;
+    const dy = endY - startY;
+    path.className = "map-path";
+    path.style.left = `${startX}%`;
+    path.style.top = `${startY}%`;
+    path.style.width = `${Math.sqrt(dx * dx + dy * dy)}%`;
+    path.style.transform = `rotate(${Math.atan2(dy, dx)}rad)`;
+    worldMap.appendChild(path);
+  });
+
+  locations.forEach((location) => {
+    const missionsInLocation = getLocationMissions(location.id);
+    const solvedInLocation = missionsInLocation.filter((mission) => state.solved.has(mission.id)).length;
+    const unlocked = isLocationUnlocked(location.id);
+    const complete = isLocationComplete(location.id);
+    const node = document.createElement("button");
+    node.type = "button";
+    node.className = ["map-node", location.id === state.selectedLocationId ? "active" : "", complete ? "done" : ""].filter(Boolean).join(" ");
+    node.disabled = !unlocked;
+    node.style.left = `${location.x}%`;
+    node.style.top = `${location.y}%`;
+    node.innerHTML = `<span class="icon" aria-hidden="true">${location.icon}</span><strong>${location.name}</strong><span>${unlocked ? `${solvedInLocation}/${missionsInLocation.length} 단서` : "잠김"}</span>`;
+    node.addEventListener("click", () => selectLocation(location.id));
+    worldMap.appendChild(node);
+  });
+  mapStatus.textContent = state.finalMode ? "마지막 암호 입력" : `${getLocation(state.selectedLocationId).name} 조사 중`;
+}
+
+function renderClues() {
+  clueBoard.innerHTML = "";
+  locations.forEach((location, index) => {
+    const collected = state.collectedClues.has(location.id);
+    const chip = document.createElement("div");
+    chip.className = collected ? "clue-chip done" : "clue-chip";
+    chip.innerHTML = `<span class="digit">${collected ? location.clue : "?"}</span><span>${index + 1}. ${location.name}</span><span>${collected ? "획득" : "미해결"}</span>`;
+    clueBoard.appendChild(chip);
+  });
+}
+
+function selectLocation(locationId) {
+  if (!isLocationUnlocked(locationId)) return;
+  state.selectedLocationId = locationId;
+  state.finalMode = false;
+  resetAttemptState();
+  renderGame();
+}
+
+function renderMission(mission) {
+  const location = getLocation(mission.locationId);
+  const missionsInLocation = getLocationMissions(location.id);
+  const missionIndex = missionsInLocation.findIndex((item) => item.id === mission.id) + 1;
+  answerForm.classList.remove("hidden");
+  hintButton.classList.remove("hidden");
+  nextButton.classList.remove("hidden");
+  restartButton.classList.add("hidden");
   answerInput.value = "";
   answerInput.disabled = false;
   hintButton.disabled = false;
   nextButton.disabled = true;
-  restartButton.classList.add("hidden");
+  submitButton.textContent = "조사";
+  attemptBadge.textContent = `기회 ${state.attemptsLeft}번`;
+  locationBadge.textContent = `${location.icon} ${location.name}`;
+  typeBadge.textContent = mission.type;
+  missionMeta.textContent = `${missionIndex}번째 단서`;
+  missionTitle.textContent = mission.title;
+  missionStory.textContent = mission.story;
+  detectiveLine.textContent = location.line;
   feedback.textContent = "";
   feedback.className = "feedback";
   hintText.textContent = "";
-  detectiveLine.textContent = detectiveLines[state.current];
   problemArea.className = "problem-area";
-
   problemArea.innerHTML = "";
   if (mission.view === "numbers") renderNumbers(mission.data);
   if (mission.view === "shapes") renderShapes(mission);
   if (mission.view === "table") renderTable(mission);
-
-  renderNotebook();
+  if (mission.view === "riddle") renderRiddle(mission);
   answerInput.focus();
+}
+
+function renderLocationComplete() {
+  const location = getLocation(state.selectedLocationId);
+  answerForm.classList.add("hidden");
+  hintButton.classList.add("hidden");
+  nextButton.classList.remove("hidden");
+  nextButton.disabled = false;
+  restartButton.classList.add("hidden");
+  locationBadge.textContent = `${location.icon} ${location.name}`;
+  typeBadge.textContent = "장소 완료";
+  attemptBadge.textContent = "단서 획득";
+  missionMeta.textContent = "조사 완료";
+  missionTitle.textContent = `${location.name} 단서 확보`;
+  missionStory.textContent = "지도에서 새로 열린 장소를 선택하거나 다음 장소로 이동하세요.";
+  detectiveLine.textContent = `${location.name}의 암호 조각은 ${location.clue}입니다.`;
+  feedback.textContent = "새 장소가 열렸습니다.";
+  feedback.className = "feedback good";
+  hintText.textContent = "";
+  problemArea.className = "problem-area";
+  problemArea.innerHTML = `<div class="final-panel"><div class="vault">${location.icon}</div><strong>암호 조각 ${location.clue}</strong><p>${location.name} 조사를 완료했습니다.</p></div>`;
+}
+
+function renderFinalMission() {
+  answerForm.classList.remove("hidden");
+  hintButton.classList.remove("hidden");
+  nextButton.classList.add("hidden");
+  restartButton.classList.add("hidden");
+  answerInput.value = "";
+  answerInput.disabled = false;
+  hintButton.disabled = false;
+  submitButton.textContent = "금고 열기";
+  locationBadge.textContent = "🔐 마지막 금고";
+  typeBadge.textContent = "최종 암호";
+  attemptBadge.textContent = "기회 3번";
+  missionMeta.textContent = "최종 사건";
+  missionTitle.textContent = "모은 암호 조각을 순서대로 입력하세요";
+  missionStory.textContent = "이동 지도에 적힌 조사 순서대로 암호 조각을 이어 붙이면 금고가 열립니다.";
+  detectiveLine.textContent = "암호 조각은 장소를 완료한 순서가 아니라, 지도에 적힌 조사 순서대로 읽어야 해요.";
+  feedback.textContent = "";
+  feedback.className = "feedback";
+  hintText.textContent = "";
+  problemArea.className = "problem-area";
+  problemArea.innerHTML = `<div class="final-panel"><div class="vault">🔐</div><strong>${codeLabel.textContent}</strong><p>시계탑부터 금고실까지, 암호 조각을 차례대로 입력하세요.</p></div>`;
+  answerInput.focus();
+}
+
+function renderSolvedFinal() {
+  answerForm.classList.add("hidden");
+  hintButton.classList.add("hidden");
+  nextButton.classList.add("hidden");
+  restartButton.classList.remove("hidden");
+  locationBadge.textContent = "사건 해결";
+  typeBadge.textContent = "완료";
+  attemptBadge.textContent = "성공";
+  missionMeta.textContent = "명탐정 인증";
+  missionTitle.textContent = "사라진 암호 사건 해결!";
+  missionStory.textContent = "모든 장소의 단서를 모아 마지막 금고를 열었습니다.";
+  detectiveLine.textContent = "훌륭해요. 이제 이 마을의 규칙 사건은 완전히 해결됐습니다.";
+  feedback.textContent = "규칙 탐정단 최고 기록!";
+  feedback.className = "feedback good";
+  hintText.textContent = "";
+  problemArea.className = "problem-area";
+  problemArea.innerHTML = `<div class="final-panel"><div class="vault">🏆</div><strong>최종 암호 ${finalAnswer}</strong><p>해결한 단서 ${getSolvedCount()}개, 획득한 별 ${state.stars}개</p></div>`;
 }
 
 function renderNumbers(numbers) {
@@ -201,7 +257,7 @@ function renderShapes(mission) {
   const shape = mission.shape || "★";
   mission.data.forEach((count) => {
     const group = document.createElement("span");
-    group.className = count === null ? "shape-group tile blank" : "shape-group";
+    group.className = count === null ? "shape-group blank" : "shape-group";
     group.textContent = count === null ? "?" : shape.repeat(count);
     group.title = count === null ? "빈칸" : `${count}개`;
     row.appendChild(group);
@@ -214,14 +270,12 @@ function renderTable(mission) {
   wrap.className = "table-wrap";
   const table = document.createElement("table");
   const headerRow = document.createElement("tr");
-
   mission.headers.forEach((header) => {
     const th = document.createElement("th");
     th.textContent = header;
     headerRow.appendChild(th);
   });
   table.appendChild(headerRow);
-
   mission.rows.forEach((row) => {
     const tr = document.createElement("tr");
     row.forEach((cell) => {
@@ -231,77 +285,108 @@ function renderTable(mission) {
     });
     table.appendChild(tr);
   });
-
   wrap.appendChild(table);
   problemArea.appendChild(wrap);
 }
 
-function renderNotebook() {
-  notebook.innerHTML = "";
-  missions.forEach((mission, index) => {
-    const note = document.createElement("div");
-    note.className = state.solved[index] ? "note done" : "note";
-    note.dataset.icon = state.solved[index] ? "★" : missionIcons[mission.view];
-    note.textContent = `${index + 1}번`;
-    note.title = mission.rule;
-    notebook.appendChild(note);
+function renderRiddle(mission) {
+  const card = document.createElement("div");
+  card.className = "riddle-card";
+  mission.lines.forEach((line) => {
+    const item = document.createElement("span");
+    item.textContent = line;
+    card.appendChild(item);
   });
+  problemArea.appendChild(card);
 }
 
-function normalize(value) {
-  return value.trim().replaceAll(",", "");
-}
+function normalize(value) { return value.trim().replaceAll(",", "").replace(/\s/g, ""); }
+function showFeedback(message, tone) { feedback.textContent = message; feedback.className = `feedback ${tone}`; }
 
 function checkAnswer(event) {
   event.preventDefault();
-  const mission = missions[state.current];
   const userAnswer = normalize(answerInput.value);
-
-  if (!userAnswer) {
-    showFeedback("정답을 입력해 주세요.", "bad");
-    return;
-  }
-
+  if (!userAnswer) return showFeedback("정답을 입력해 주세요.", "bad");
+  if (state.finalMode) return checkFinalAnswer(userAnswer);
+  const mission = getCurrentMission();
+  if (!mission) return;
   if (userAnswer === mission.answer) {
     const earned = Math.max(1, state.attemptsLeft);
     state.stars += earned;
-    state.solved[state.current] = true;
-    starsLabel.textContent = `별 ${state.stars}개`;
+    state.solved.add(mission.id);
+    collectLocationClueIfComplete(mission.locationId);
     showFeedback(`정답입니다! ${mission.rule}을 찾아냈어요. 별 ${earned}개 획득!`, "good");
-    detectiveLine.textContent = "좋아요! 단서가 사건 지도에 기록됐어요.";
+    detectiveLine.textContent = "좋아요. 이 단서가 지도에 기록됐습니다.";
     animateProblem("good-pop");
     launchSparkles();
     answerInput.disabled = true;
     hintButton.disabled = true;
     nextButton.disabled = false;
-    renderNotebook();
+    renderMap();
+    renderClues();
+    stageLabel.textContent = `${getSolvedCount()} / ${missions.length}`;
+    starsLabel.textContent = `${state.stars}개`;
+    codeLabel.textContent = codeText();
+    clueCount.textContent = `${state.collectedClues.size} / ${locations.length}`;
     return;
   }
-
   state.attemptsLeft -= 1;
   attemptBadge.textContent = `기회 ${state.attemptsLeft}번`;
   animateProblem("bad-shake");
-
   if (state.attemptsLeft <= 0) {
+    state.solved.add(mission.id);
+    collectLocationClueIfComplete(mission.locationId);
     showFeedback(`아쉬워요. 정답은 ${mission.answer}입니다. 규칙은 '${mission.rule}'이에요.`, "bad");
-    detectiveLine.textContent = "괜찮아요. 정답을 보고 규칙을 한 번 더 말해보면 실력이 올라가요.";
+    detectiveLine.textContent = "정답을 확인한 뒤 규칙을 말로 설명해 보세요. 다음 단서로 넘어갈 수 있어요.";
     answerInput.disabled = true;
     hintButton.disabled = true;
     nextButton.disabled = false;
+    renderMap();
+    renderClues();
+    stageLabel.textContent = `${getSolvedCount()} / ${missions.length}`;
+    codeLabel.textContent = codeText();
+    clueCount.textContent = `${state.collectedClues.size} / ${locations.length}`;
     return;
   }
-
-  detectiveLine.textContent = "아직 단서가 남아 있어요. 변화량을 다시 비교해 봅시다.";
-  showFeedback("다시 생각해 봐요. 규칙을 먼저 말로 설명해 보면 좋아요.", "bad");
+  detectiveLine.textContent = "아직 단서가 남아 있어요. 변화량이나 곱셈 관계를 다시 확인하세요.";
+  showFeedback("다시 조사해 봐요. 규칙을 먼저 말로 설명하면 좋아요.", "bad");
 }
 
-function showFeedback(message, tone) {
-  feedback.textContent = message;
-  feedback.className = `feedback ${tone}`;
+function checkFinalAnswer(userAnswer) {
+  if (userAnswer === finalAnswer) {
+    state.finalSolved = true;
+    state.stars += 5;
+    launchSparkles(18);
+    renderGame();
+    return;
+  }
+  state.attemptsLeft -= 1;
+  attemptBadge.textContent = `기회 ${state.attemptsLeft}번`;
+  animateProblem("bad-shake");
+  if (state.attemptsLeft <= 0) {
+    showFeedback(`마지막 암호는 ${finalAnswer}입니다. 장소 순서대로 다시 읽어 보세요.`, "bad");
+    detectiveLine.textContent = "암호 조각을 지도 순서대로 이어 붙이면 됩니다.";
+    answerInput.disabled = true;
+    hintButton.disabled = true;
+    restartButton.classList.remove("hidden");
+    return;
+  }
+  showFeedback("암호 순서가 조금 달라요. 지도에 적힌 순서대로 다시 읽어 보세요.", "bad");
+}
+
+function collectLocationClueIfComplete(locationId) {
+  if (!isLocationComplete(locationId) || state.collectedClues.has(locationId)) return;
+  state.collectedClues.add(locationId);
 }
 
 function showHint() {
-  const mission = missions[state.current];
+  if (state.finalMode) {
+    hintText.textContent = "힌트: 이동 지도 아래의 조사 순서대로 암호 조각을 읽으세요.";
+    detectiveLine.textContent = "시계탑부터 시작해서 화살표를 따라가면 됩니다.";
+    return;
+  }
+  const mission = getCurrentMission();
+  if (!mission) return;
   const hint = mission.hints[Math.min(state.hintIndex, mission.hints.length - 1)];
   hintText.textContent = `힌트: ${hint}`;
   detectiveLine.textContent = hint;
@@ -309,37 +394,27 @@ function showHint() {
 }
 
 function goNext() {
-  if (state.current === missions.length - 1) {
-    const perfect = missions.length * 3;
-    const rank = getRank(state.stars, perfect);
-    problemArea.innerHTML = `
-      <div class="certificate">
-        <div class="medal">🏅</div>
-        <strong>${rank}</strong>
-        <p>획득한 별: ${state.stars}/${perfect}</p>
-      </div>
-    `;
-    missionTitle.textContent = "사건 해결!";
-    missionStory.textContent = "모든 규칙 단서를 찾아냈습니다. 탐정 수첩을 보며 다시 연습해 보세요.";
-    answerInput.disabled = true;
-    hintButton.disabled = true;
-    nextButton.disabled = true;
-    restartButton.classList.remove("hidden");
-    detectiveLine.textContent = `${rank} 인증 완료! 다시 도전하면 별을 더 모을 수 있어요.`;
-    feedback.textContent = "규칙 탐정단 인증서를 획득!";
-    feedback.className = "feedback good";
-    launchSparkles(14);
+  if (state.finalSolved) return;
+  if (state.finalMode) return renderFinalMission();
+  const mission = getCurrentMission();
+  if (mission) {
+    resetAttemptState();
+    renderGame();
     return;
   }
-
-  state.current += 1;
-  renderMission();
-}
-
-function getRank(stars, perfect) {
-  if (stars >= perfect - 5) return "전설의 규칙 탐정";
-  if (stars >= Math.ceil(perfect * 0.6)) return "명탐정";
-  return "수습 탐정";
+  const selectedIndex = locations.findIndex((location) => location.id === state.selectedLocationId);
+  const nextLocation = locations.slice(selectedIndex + 1).find((location) => isLocationUnlocked(location.id));
+  if (nextLocation && !isLocationComplete(nextLocation.id)) {
+    state.selectedLocationId = nextLocation.id;
+    resetAttemptState();
+    renderGame();
+    return;
+  }
+  if (getSolvedCount() === missions.length) {
+    state.finalMode = true;
+    resetAttemptState();
+    renderGame();
+  }
 }
 
 function animateProblem(className) {
@@ -356,19 +431,22 @@ function launchSparkles(count = 8) {
     spark.textContent = i % 3 === 0 ? "★" : "✦";
     spark.style.left = `${rect.left + rect.width * (0.2 + Math.random() * 0.6)}px`;
     spark.style.top = `${rect.top + rect.height * (0.25 + Math.random() * 0.4)}px`;
-    spark.style.color = i % 2 === 0 ? "#f6b82d" : "#2563eb";
+    spark.style.color = i % 2 === 0 ? "#f2b84b" : "#2563eb";
     document.body.appendChild(spark);
     spark.addEventListener("animationend", () => spark.remove());
   }
 }
 
 function restartGame() {
-  state.current = 0;
+  state.selectedLocationId = locations[0].id;
   state.stars = 0;
   state.attemptsLeft = 3;
   state.hintIndex = 0;
-  state.solved = Array(missions.length).fill(false);
-  renderMission();
+  state.solved = new Set();
+  state.collectedClues = new Set();
+  state.finalMode = false;
+  state.finalSolved = false;
+  renderGame();
 }
 
 answerForm.addEventListener("submit", checkAnswer);
@@ -376,4 +454,4 @@ hintButton.addEventListener("click", showHint);
 nextButton.addEventListener("click", goNext);
 restartButton.addEventListener("click", restartGame);
 
-renderMission();
+renderGame();
